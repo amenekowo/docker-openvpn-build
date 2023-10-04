@@ -1,0 +1,46 @@
+name: build
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  #schedule:
+  # Build on every week
+  #  - cron:  '0 0 */7 * *'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Prepare Docker environment
+        run: |
+          sudo apt update
+          sudo apt upgrade
+          sudo apt install -y ca-certificates curl gnupg git
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+          sudo chmod a+r /etc/apt/keyrings/docker.gpg
+          echo \ 
+          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt update
+          sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+      - name: Clone repo
+        run: |
+          cd ~
+          git clone https://github.com/kylemanna/docker-openvpn
+      
+      - name: Build
+        run: |
+          cd ~/docker-openvpn
+          docker build .
+
+          
