@@ -16,9 +16,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      #- uses: actions/checkout@v3
-
+    
       - name: Prepare Docker environment
         run: |
           sudo apt update
@@ -34,9 +32,13 @@ jobs:
           cd ~
           git clone https://github.com/kylemanna/docker-openvpn
       
-      - name: Build
+      - name: Build & Upload
+        env:
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
         run: |
           cd ~/docker-openvpn
-          docker build .
+          docker login --username ameneko --password $DOCKER_HUB_TOKEN
+          docker build . docker.io/ameneko/docker-openvpn
+          docker push
 
           
