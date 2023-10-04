@@ -42,7 +42,6 @@ jobs:
         run: |
           cd ~/docker-openvpn
           docker login --username ameneko --password $DOCKER_HUB_TOKEN
-          docker build -t ameneko/docker-openvpn:$NOW_DATE .
-          docker push ameneko/docker-openvpn:$NOW_DATE
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn:$NOW_DATE --push .\
 
           
