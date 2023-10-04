@@ -48,7 +48,7 @@ jobs:
           # Show builder images
           docker buildx inspect --bootstrap
           # Start build
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn .
-          docker push ameneko/docker-openvpn
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn:latest .
+          docker push ameneko/docker-openvpn:latest
           docker tag ameneko/docker-openvpn:latest ameneko/docker-openvpn:$NOW_DATE
           docker push ameneko/docker-openvpn:$NOW_DATE
