@@ -17,6 +17,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     
+      # https://stackoverflow.com/questions/60942067/get-current-date-and-time-in-github-workflows
+      - name: Set current date as env variable
+        run: echo "NOW_DATE=$(date +'%Y%m%dT')" >> $GITHUB_ENV
+        
       - name: Prepare Docker environment
         run: |
           sudo apt update
@@ -38,7 +42,7 @@ jobs:
         run: |
           cd ~/docker-openvpn
           docker login --username ameneko --password $DOCKER_HUB_TOKEN
-          docker build . docker.io/ameneko/docker-openvpn
-          docker push
+          docker build -t ameneko/docker-openvpn .
+          docker push ameneko/docker-openvpn:$NOW_DATE
 
           
