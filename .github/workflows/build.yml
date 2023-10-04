@@ -33,6 +33,11 @@ jobs:
         run: |
           cd ~
           git clone https://github.com/kylemanna/docker-openvpn
+
+      - name: Switch Docker Alpine image from latest to edge
+        run: |
+          cd ~/docker-openvpn
+          sed -i 's/alpine:latest/alpine:edge/' Dockerfile
       
       - name: Build & Upload
         env:
@@ -46,4 +51,4 @@ jobs:
           # Show builder images
           #docker buildx inspect --bootstrap
           # Start build
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm32v6,linux/arm32v7,linux/i386,linux/ppc64le,linux/riscv64,linux/s390x -t ameneko/docker-openvpn:latest --push .
+          docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/riscv64,linux/s390x -t ameneko/docker-openvpn:latest --push .
