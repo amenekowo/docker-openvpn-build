@@ -49,5 +49,5 @@ jobs:
           docker buildx inspect --bootstrap
           # Start build
           docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn:$NOW_DATE --push .\
-
-          
+          docker tag ameneko/docker-openvpn:$NOW_DATE ameneko/docker-openvpn:latest
+          docker push ameneko/docker-openvpn:latest
