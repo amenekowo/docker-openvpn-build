@@ -4,8 +4,8 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   schedule:
-  # Build on every week
-    - cron:  '0 0 */7 * *'
+  # Build on every day
+    - cron:  '0 0 * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,9 +18,7 @@ jobs:
     steps:
     
       # https://stackoverflow.com/questions/60942067/get-current-date-and-time-in-github-workflows
-      - name: Set current date as env variable
-        run: echo "NOW_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-        
+      
       - name: Prepare Docker environment
         run: |
           sudo apt update
@@ -46,9 +44,6 @@ jobs:
           docker buildx create --name mybuilder
           docker buildx use mybuilder
           # Show builder images
-          docker buildx inspect --bootstrap
+          #docker buildx inspect --bootstrap
           # Start build
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn:latest --load .
-          docker push ameneko/docker-openvpn:latest
-          docker tag ameneko/docker-openvpn:latest ameneko/docker-openvpn:$NOW_DATE
-          docker push ameneko/docker-openvpn:$NOW_DATE
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t ameneko/docker-openvpn:latest --push .
