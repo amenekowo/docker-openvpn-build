@@ -35,8 +35,7 @@ jobs:
           git clone https://github.com/kylemanna/docker-openvpn
 
       - name: Get current date
-        id: date
-        run: echo "$(date +'%Y%m%d')"
+        run: echo "NOW_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
         
       - name: Switch Docker Alpine image from latest to edge
         run: |
@@ -55,4 +54,4 @@ jobs:
           # Show builder images
           #docker buildx inspect --bootstrap
           # Start build
-          docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/riscv64,linux/s390x -t ameneko/docker-openvpn:${{ steps.date.outputs.date }} --push .
+          docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v6,linux/arm/v7,linux/386,linux/ppc64le,linux/riscv64,linux/s390x -t ameneko/docker-openvpn:$NOW_DATE --push .
